@@ -278,10 +278,17 @@ There are additional specific settings can be optionally changed. For those inte
 We implement multi-gpu training using DP rather than DDP (which might be more optimal) and record training logs using tensorboard.
 
 
+## BootInv
+
+For those developers interested to evaluate [BootInv (A.K.A. nerf-from-image)](https://github.com/google-research/nerf-from-image) on real-world autonomous driving datasets like SUPNeRF and AutoRF, we provide our fork of BootInv with additional evaluation pipelines [here](https://github.com/yuliangguo/nerf-from-image).
+
+You will need to follow the original instruction to install the package and prepared the pre-trained models. Then you can follow the same data preparation in this repo, while putting all the dataset structures under `nerf-from-image/datasets/`. Then you can follow closely with the '.vscode/launch.json' file in our folk [here](https://github.com/yuliangguo/nerf-from-image/blob/main/.vscode/launch.json) to conduct testing and evaluation of BootInv on the three major autonomous dirving datasets including nuScenes, KITTI, and Waymo.
+
+
 ## Acknowledgements
 We thank the authors of the following awesome codebases:
 - [CodeNeRF](https://github.com/wbjang/code-nerf)
-- [BootInv](https://github.com/google-research/nerf-from-image)
+- [BootInv (A.K.A. nerf-from-image)](https://github.com/google-research/nerf-from-image)
 - [DEVIANT](https://github.com/abhi1kumar/DEVIANT)
 - [FCOS3D](https://github.com/open-mmlab/mmdetection3d/tree/main/configs/fcos3d)
 

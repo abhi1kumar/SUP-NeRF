@@ -10,15 +10,15 @@
     "num_dir_freq": 4,
     "norm_layer_type": "BatchNorm2d",
     "pose_shortcut": 1,
-    "pred_wlh": 1
+    "pred_wlh": 0
   },
   "dataset": {
     "name": "nusc",
     "nusc_cat": "vehicle.car",
     "seg_cat": "car",
-    "train_data_dir": "/data_ssd/guo1syv/Datasets/nuscenes/v1.0-trainval",
+    "train_data_dir": "data/NuScenes",
     "train_nusc_version": "v1.0-trainval",
-    "test_data_dir": "/mnt/SSD4TB/Datasets/NuScenes/v1.0-mini-full",
+    "test_data_dir": "data/NuScenes",
     "test_nusc_version": "v1.0-mini",
     "img_h": 900,
     "img_w": 1600,

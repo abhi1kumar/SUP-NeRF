@@ -9,8 +9,6 @@ import torchvision
 from torchvision.transforms import Resize
 from scipy.spatial.transform import Rotation as R
 
-# from renderer_bak import NeRFRenderer
-# renderer = NeRFRenderer()
 
 def clip_gradients(model, clip):
     norms = []
@@ -216,33 +214,6 @@ def volume_rendering2(sigmas, rgbs, z_vals):
     weights = alphas * accum_trans
     rgb_final = torch.sum(weights.unsqueeze(-1) * rgbs, -2)
     depth_final = torch.sum(weights * z_vals, -1)
-    return rgb_final, depth_final, accum_trans[:, -1]
-
-
-def volume_rendering3(sigmas, rgbs, z_vals, white_bkgd=False):
-    """
-        return accumulated transparency in addition
-        each ray has its own z_vals, the first dim of z_vals equals to sigmas and rgbs
-        TODO: the returned depth should be in z-buffer for evaluation
-        TODO: pad the last deltas with 0 leads to black BG, might be better for removing floating --> last weight = 0
-
-    """
-    deltas = z_vals[:, 1:] - z_vals[:, :-1]
-    deltas = torch.cat([deltas, torch.ones_like(deltas[:, :1]) * 1e10], -1)
-    # deltas = torch.cat([deltas, torch.zeros_like(deltas[:, :1])], -1)
-    alphas = 1 - torch.exp(-torch.relu(sigmas).squeeze(-1) * deltas)
-    trans = 1 - alphas + 1e-10
-    transmittance = torch.cat([torch.ones_like(trans[..., :1]), trans], -1)
-    accum_trans = torch.cumprod(transmittance, -1)[..., :-1]
-    weights = alphas * accum_trans
-    rgb_final = torch.sum(weights.unsqueeze(-1) * rgbs, -2)
-    depth_final = torch.sum(weights * z_vals, -1)
-
-    if white_bkgd:
-        # White background
-        pix_alpha = weights.sum(dim=1)  # (B), pixel alpha
-        rgb_final = rgb_final + 1 - pix_alpha.unsqueeze(-1)
-
     return rgb_final, depth_final, accum_trans[:, -1]
 
 
@@ -529,100 +500,6 @@ def render_rays_v2(model, device, img, mask_occ, cam_pose, obj_diag, K, roi, n_s
     rgb_rays, depth_rays, acc_trans_rays = volume_rendering2(sigmas, rgbs, z_vals.to(device))
     # Should occ_pixels updated with intersect? --no, the occ mask should be more accurate.
     return rgb_rays, depth_rays, acc_trans_rays, rgb_tgt, occ_pixels
-
-
-# def render_rays_v3(model, device, img, mask_occ, cam_pose, obj_wlh, K, roi, n_samples, shapecode, texturecode, shapenet_obj_cood, sym_aug, kitti2nusc=False, im_sz=64, n_rays=None, adjust_scale=1.0):
-    """
-        Assume only one input image, sample pixels from the roi area, and render rgb and depth values of the sampled pixels.
-        Return both rendered values and tgt values for the sampled pixels, as well additional output for training purpose
-
-        img : cropped img wrt. roi. already masked before input
-        mask_occ: cropped mask_occ wrt. roi
-        roi: need to be square (Maybe not necessary) and within img range
-
-        v3: This version apply ray-AABB intersection to performance more accurate ray sampling
-    """
-    # obj_diag = obj_diag * 1.1
-
-    rays_o, viewdir = get_rays(K, cam_pose, roi, uv_steps=[im_sz, im_sz])
-    # reshape img and mask_occ to im_sz
-    img = img.unsqueeze(0).permute((0, 3, 1, 2))
-    img = Resize((im_sz, im_sz))(img)
-    img = img.permute((0, 2, 3, 1))
-    mask_occ = mask_occ.unsqueeze(0).permute((0, 3, 1, 2))
-    mask_occ = Resize((im_sz, im_sz))(mask_occ).type(torch.int32).type(torch.float32)
-    mask_occ = mask_occ.permute((0, 2, 3, 1))
-
-    rgb_tgt = img.reshape(-1, 3).to(device)
-    occ_pixels = mask_occ.reshape(-1, 1).to(device)
-
-    if n_rays is not None:
-        # For different sized roi, extract a random subset of pixels with fixed batch size
-        n_rays = np.minimum(rays_o.shape[0], n_rays)
-        random_ray_ids = np.random.permutation(rays_o.shape[0])[:n_rays]
-        rays_o = rays_o[random_ray_ids]
-        viewdir = viewdir[random_ray_ids]
-        rgb_tgt = rgb_tgt[random_ray_ids]
-        occ_pixels = occ_pixels[random_ray_ids]
-
-    obj_diag = np.linalg.norm(obj_wlh).astype(np.float32)
-    obj_w, obj_l, obj_h = obj_wlh
-    aabb_min = np.asarray([-obj_l / obj_diag, -obj_w / obj_diag, -obj_h / obj_diag]).reshape((1, 3)).repeat(
-        rays_o.shape[0], axis=0)
-    aabb_max = np.asarray([obj_l / obj_diag, obj_w / obj_diag, obj_h / obj_diag]).reshape((1, 3)).repeat(
-        rays_o.shape[0], axis=0)
-    # aabb_min = None
-    # aabb_max = None
-    z_in, z_out, intersect = ray_box_intersection(rays_o.cpu().detach().numpy() / (obj_diag / 2),
-                                                  viewdir.cpu().detach().numpy(),
-                                                  aabb_min=aabb_min,
-                                                  aabb_max=aabb_max
-                                                  )
-    bounds = np.ones((*rays_o.shape[:-1], 2)) * -1
-    bounds[intersect, 0] = z_in
-    bounds[intersect, 1] = z_out
-    rays = torch.concat([rays_o.to(device) / (obj_diag / 2), viewdir.to(device), torch.FloatTensor(bounds).to(device)], -1)
-    z_coarse = renderer.sample_from_ray(rays)
-    xyz = rays[:, None, :3] + z_coarse[:, :, None] * rays[:, None, 3:6]
-    viewdir = viewdir.unsqueeze(-2).repeat(1, n_samples, 1)
-    # compute z_vals (distance to the camera canter)
-    z_vals = torch.norm((xyz - rays[:, None, :3]) * (obj_diag / 2), p=2, dim=-1)
-
-    # adjust scale to match trained models
-    xyz *= adjust_scale
-    # Apply symmetric augmentation
-    if sym_aug and random.uniform(0, 1) > 0.5:
-        xyz[:, :, 1] *= (-1)
-        viewdir[:, :, 1] *= (-1)
-
-    # Kitti to Nuscenes
-    if kitti2nusc:
-        R_x = np.array([[1., 0., 0.],
-                        [0., 0., 1.],
-                        [0., -1., 0.]]).astype(np.float32)
-        R_x = torch.from_numpy(R_x).view(1, 1, 3, 3).to(device)
-        xyz = R_x @ xyz.unsqueeze(-1)
-        viewdir = R_x @ viewdir.unsqueeze(-1)
-        xyz = xyz.squeeze(-1)
-        viewdir = viewdir.squeeze(-1)
-
-    # Nuscene to ShapeNet: frame rotate -90 degree around Z, coord rotate 90 degree around Z
-    if shapenet_obj_cood:
-        xyz = xyz[:, :, [1, 0, 2]]
-        xyz[:, :, 0] *= (-1)
-        viewdir = viewdir[:, :, [1, 0, 2]]
-        viewdir[:, :, 0] *= (-1)
-
-    sigmas, rgbs = model(xyz.to(device),
-                         viewdir.to(device),
-                         shapecode, texturecode)
-    rgb_rays, depth_rays, acc_trans_rays = volume_rendering3(sigmas, rgbs, z_vals.to(device))
-    # rgb_rays, depth_rays, acc_trans_rays = renderer.volume_render(rgbs, sigmas.squeeze(), z_vals.to(device))
-
-    # Should occ_pixels updated with intersect? --no, the occ mask should be more accurate.
-    # occ_pixels[~intersect] = 0
-    return rgb_rays, depth_rays, acc_trans_rays, rgb_tgt, occ_pixels
-
 
 def render_rays_specified(model, device, img, mask_occ, cam_pose, obj_diag, K, roi, x_vec, y_vec, n_samples, shapecode, texturecode,
                           shapenet_obj_cood, sym_aug, kitti2nusc=False):

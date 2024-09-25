@@ -11,8 +11,9 @@ from src.data_nuscenes import NuScenesData
 from model_supnerf import SUPNeRF
 from src.utils import roi_process, preprocess_img_square, render_box, normalize_by_roi, \
     view_points, view_points_batch, corners_of_box, corners_of_box_batch, Resize, roi_coord_trans, \
-    image_float_to_uint8, get_random_pose2, get_rays, sample_from_rays, sample_from_rays_v2, ray_box_intersection, \
-    volume_rendering3, render_rays, render_rays_v2, render_rays_v3
+    image_float_to_uint8, get_random_pose2, get_rays, sample_from_rays_v2, ray_box_intersection, \
+    render_rays_v2 
+from src.renderer import volume_rendering3, render_rays_v3
 
 
 class OptimizerDemo:
@@ -580,11 +581,8 @@ class OptimizerDemo:
 
 if __name__ == '__main__':
     tgt_img_name = 'n015-2018-10-08-15-36-50+0800__CAM_FRONT__1538984240912467.jpg'
-    # tgt_img_name = 'n008-2018-08-27-11-48-51-0400__CAM_FRONT_RIGHT__1535385099370482.jpg'
-    # tgt_img_name = 'n008-2018-08-01-15-16-36-0400__CAM_FRONT__1533151609912404.jpg'
     gpu = 0
-    # model_file = 'exps_nuscenes_supnerf/vehicle.car.v1.0-trainval.use_instance.bsize36.e_rate1.0_pred_box2d_aug_box2d_aug_wlh_finetune_wlh_2023_11_04/epoch_79.pth'
-    model_file = 'exps_nuscenes_supnerf/vehicle.car.v1.0-trainval.use_instance.bsize32.e_rate1.0_pred_box2d_aug_box2d_aug_wlh_finetune_wlh_2023_11_04_new/epoch_79.pth'
+    model_file = 'checkpoints/supnerf/epoch_39.pth'
     ray_batch_size = 1024
     save_dir = os.path.join('demo_output', tgt_img_name[:-4])
     if not os.path.exists(save_dir):
