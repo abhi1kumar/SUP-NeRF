@@ -1,0 +1,193 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Train SUPNeRF nuScenes",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train_nuscenes.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/supnerf.nusc.vehicle.car.json",
+                "--gpus",
+                "4",
+                "--batch_size",
+                "48",
+                "--num_workers",
+                "16",
+                "--epochs",
+                "40"
+            ]
+        },
+        {
+            "name": "Train AutoRF nuScenes",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "train_nuscenes.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/autorfmix.nusc.vehicle.car.json",
+                "--gpus",
+                "4",
+                "--batch_size",
+                "48",
+                "--num_workers",
+                "16",
+                "--epochs",
+                "40"
+            ]
+        },
+        {
+            "name": "Test SUPNeRF nuScenes",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_nuscenes.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/supnerf.nusc.vehicle.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "2",                    // use fully random pose within the view as initilization
+                "--reg_iters",
+                "3",                    // 3 iterations of pose refine module
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--nusc-version",
+                "v1.0-mini",            // change to "v1.0-trainval" for full evaluation
+            ]
+        },
+        {
+            "name": "Test AutoRF nuScenes",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_nuscenes.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/autorfmix.nusc.vehicle.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "3",                    // use third-party pose result as initilization
+                "--reg_iters",
+                "0",                    // no pose refine module for AutoRF
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--nusc-version",
+                "v1.0-mini",            // change to "v1.0-trainval" for full evaluation
+            ]
+        },
+        {
+            "name": "Test SUPNeRF KITTI",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_kitti.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/supnerf.kitti.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "2",                    // use fully random pose within the view as initilization
+                "--reg_iters",
+                "3",                    // 3 iterations of pose refine module
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--num-samples2eval",   // comment out for full evaluation
+                "500"                   // comment out for full evaluation
+            ]
+        },
+        {
+            "name": "Test AutoRF KITTI",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_kitti.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/autorfmix.kitti.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "3",                    // use third-party pose result as initilization
+                "--reg_iters",
+                "0",                    // no pose refine module for AutoRF
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--num-samples2eval",   // comment out for full evaluation
+                "500"                   // comment out for full evaluation
+            ]
+        },
+        {
+            "name": "Test SUPNeRF Waymo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_waymo.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/supnerf.waymo.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "2",                    // use fully random pose within the view as initilization
+                "--reg_iters",
+                "3",                    // 3 iterations of pose refine module
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--val-small"           // use small validation set
+            ]
+        },
+        {
+            "name": "Test AutoRF Waymo",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "optimize_waymo.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--config_file",
+                "jsonfiles/autorfmix.waymo.car.json",
+                "--gpu",
+                "0",
+                "--add_pose_err",
+                "3",                    // use third-party pose result as initilization
+                "--reg_iters",
+                "0",                    // no pose refine module for AutoRF
+                "--vis",
+                "0",                    // change to 1 or 2 for visualization
+                "--val-small"           // use small validation set
+            ]
+        },
+        {
+            "name": "Evaluate saved result",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "scripts/eval_saved_result.py",
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}"
+            },
+            "args": [
+                "--model-folder",
+                "checkpoints/supnerf",
+                "--test-folder",
+                "test_nuscenes",
+                "--legend-name",
+                "SUPNeRF-nuScenes",
+                "--plot-cross-view",
+            ]
+        }
+    ]
+}
