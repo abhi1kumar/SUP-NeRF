@@ -77,7 +77,7 @@ pip install -r requirements.txt
 
 ### nuScenes
 
-We use nuScenes dataset in both training and testing Pipelines. You can save the download NuScenes dataset to you data directory and soft link the related directories to the project `data/NuScenes` directory. The required data structure is as follows:
+We use nuScenes dataset for both training and testing. Download NuScenes dataset to you data directory and soft link the related directories to the project `data/NuScenes` directory. The required data structure is as follows:
 
 ```bash
 SUPNERF
@@ -95,17 +95,15 @@ SUPNERF
 
 `samples`, `maps`, `v1.0-mini`, `v1.0-trainval` are directly downloaded from the [nuScenes](https://www.nuscenes.org/nuscenes) dataset.
 
-
 `pred_instance` includes the required instance masks prepared via a customized script in our folk of [mask-rcnn detectron2](https://github.com/yuliangguo/detectron2/tree/main/demo). Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/7yc4855o2lhlk42o52mib/pred_instance.zip?rlkey=ai4h3fe2ni56m6h3dxtweazs8&st=1wte714h&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/NuScenes/).
-
 
 `pred_det3d` includes 3D object detection results via a customized script in our folk of [FCOS3D](https://github.com/yuliangguo/mmdetection3d/tree/master/demo). It is only required by previous method AutoRF. If you only consider trying our method, you may not need it. Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/i0ov47j8qifebfpmhgxu2/pred_det3d.zip?rlkey=j5pyzyfcgkt1ij4ge69n0pcwm&st=hgzf2vy0&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/NuScenes/).
 
-It is worth noting that our method follows a object-centric setup, where only a subset of annotated objects are curated for experiments. Please follow our paper for the data curation details. The curated subsets and splits are recorded in those `.json` files in `data/NuScenes`. If you would like to modify the curation, check `src/data_nuscenes.py` to re-run the preprocess step.
+SUP-NeRF follows a object-centric setup, where only a subset of annotated objects are curated for experiments. Please follow our paper for the data curation details. The curated subsets and splits are recorded in `.json` files in `data/NuScenes`. To modify the curation, check `src/data_nuscenes.py` to re-run the preprocess step.
 
 ### KITTI
 
-We use KITTI dataset in cross-domain generalization test. While all the training are done on nuScenes dataset, KITTI dataset is only used for testing. We following [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md) to setup the basic KITTI directry. And we prepare additional directories for our experiments. The required data structure is as follows:
+We use KITTI dataset in cross-domain generalization test. We follow [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md) to setup the basic KITTI directory. And we prepare additional directories for our experiments. The required data structure is as follows:
 
 ```bash
 SUPNERF
@@ -131,11 +129,11 @@ Similar to nuScenes, `pred_instance` includes the required instance masks prepar
 
 Similar to nuScenes, `pred` includes 3D object detection results via a customized script in our folk of [FCOS3D](https://github.com/yuliangguo/mmdetection3d/tree/master/demo). It is only required by previous method AutoRF. Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/ueh81g70yjr170xh251au/pred.zip?rlkey=soswt95qt5e5l04fwk6wspta2&st=7o9uoww3&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/KITTI/training/).
 
-The object-center curated subsets and splits for our experiments are recorded in those `.json` files in `data/KITTI`. If you would like to modify the curation, check `src/data_kitti.py` to re-run the preprocess step.
+The object-center curated subsets and splits for our experiments are recorded in those `.json` files in `data/KITTI`. To modify the curation, check `src/data_kitti.py` to re-run the preprocess step.
 
 ### Waymo (Front View)
 
-We use Waymo dataset valication split for cross-domain generalization test. While all the training are done on nuScenes dataset, KITTI dataset is only used for testing. We following [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md) to prepare waymo dataset in a similar structure as KITTI. And we prepare additional directories for our experiments. The required data structure is as follows:
+We use Waymo dataset validation split for cross-domain generalization test. We follow [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md#waymo) to prepare waymo dataset similar to KITTI. And we prepare additional directories for our experiments. The required data structure is as follows:
 
 ```bash
 SUPNERF
@@ -152,7 +150,6 @@ SUPNERF
 │      │  ...
 │ ...
 ```
-Because only the training split of KITTI dataset includes ground-truth object annotations, we conduct cross-domain evaluation on the training split of KITTI dataset.
 
 `calib`, `image`, `label`, `velodyne` are directly prepared following [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md#waymo). If you want to prepare on your own, you could download the validation set from Waymo website, and use our script `data/Waymo/converter.py`. Our experiments are limited to the front view of Waymo. For all the surrounding views, you may refer to [mmlab-version converter](https://github.com/open-mmlab/mmdetection3d/blob/fe25f7a51d36e3702f961e198894580d83c4387b/tools/dataset_converters/waymo_converter.py#L33) for the data preparation.
 
@@ -160,7 +157,7 @@ Similar to nuScenes, `pred_instance` includes the required instance masks prepar
 
 Similar to nuScenes, `pred` includes 3D object detection results via a customized script in our folk of [FCOS3D](https://github.com/yuliangguo/mmdetection3d/tree/master/demo). It is only required by previous method AutoRF. Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/3uo06xo0pbgyhq4kwvm5j/pred.zip?rlkey=j5zaccjs6v1sotvx52roq4xmt&st=cgopz3i9&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/Waymo/validation).
 
-The object-centric curated subsets and splits for our experiments are recorded in those `.json` files in `data/Waymo`. If you would like to modify the curation, check `src/data_waymo.py` to re-run the preprocess step.
+The object-centric curated subsets and splits for our experiments are recorded in those `.json` files in `data/Waymo`. To modify the curation, check `src/data_waymo.py` to re-run the preprocess step.
 
 ## VSCode Launch
 
