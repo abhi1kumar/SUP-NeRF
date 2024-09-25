@@ -4,10 +4,22 @@
 
 ### [Project Page](https://yuliangguo.github.io/supnerf/) | [Paper](https://arxiv.org/abs/2403.15705) | [Talk](https://www.youtube.com/watch?v=30sS-7OxD9s)
 
-Yuliang Guo, Abhinav Kumar, Cheng Zhao, Ruoyu Wang, Xinyu Huang, Liu Ren\
-Bosch Research North America, Bosch Center for AI
+[![arXiv](http://img.shields.io/badge/arXiv-2403.15705-B31B1B.svg)](https://arxiv.org/abs/2403.15705)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=abhi1kumar%2FSUP-NeRF&labelColor=%23FFFFFF&countColor=%23721e82&style=flat)](https://visitorbadge.io/status?path=abhi1kumar%2FSUP-NeRF)
+[![GitHub Stars](https://img.shields.io/github/stars/abhi1kumar/SUP-NeRF?style=social)](https://github.com/abhi1kumar/SUP-NeRF)
 
-in [ECCV 2024](https://eccv.ecva.net/)
+   <p style="font-size:1.2em">
+      <a href="https://yuliangguo.github.io"><strong>Yuliang Guo</strong></a><sup>1</sup> ·
+      <a href="https://sites.google.com/view/abhinavkumar"><strong>Abhinav Kumar</strong></a><sup>1,2</sup> ·
+      <a href="https://scholar.google.com/citations?user=EAC-8m0AAAAJ&hl=en"><strong>Cheng Zhao</strong></a><sup>1</sup> ·
+      <a href="https://scholar.google.com/citations?user=UfGLSTkAAAAJ&hl=en"><strong>Ruoyu Wang</strong></a><sup>1</sup> ·
+      <a href="https://scholar.google.com/citations?user=cL4bNBwAAAAJ&hl=en"><strong>Xinyu Huang</strong></a><sup>1</sup> ·
+      <a href="https://www.liu-ren.com"><strong>Liu Ren</strong></a><sup>1</sup> <br>
+      <sup>1</sup>Bosch Research North America, Bosch Center for AI, <sup>2</sup>Michigan State University
+   </p>
+
+in [ECCV 2024](https://eccv2024.ecva.net/)
 
 <p align="center">
       <img src="figs/pipeline_overview.png" width="800">
@@ -28,7 +40,7 @@ If you find our work useful in your research, please consider starring the repo 
 
 ```Bibtex
 @inproceedings{guo2024supnerf,
-   title={{SUP-NeRF: A Streamlined Unification of Pose Estimation and NeRF for Monocular 3D Object Reconstruction}},
+   title={{SUP-NeRF: A Streamlined Unification of Pose Estimation and NeRF for Monocular $3$D Object Reconstruction}},
    author={Yuliang Guo, Abhinav Kumar, Cheng Zhao, Ruoyu Wang, Xinyu Huang, Liu Ren},
    booktitle={ECCV},
    year={2024}
@@ -42,7 +54,9 @@ If you find our work useful in your research, please consider starring the repo 
 - [x] Training pipeline for SUP-NeRF and AutoRF on [nuScenes](https://www.nuscenes.org/nuscenes) dataset
 - [x] Testing and evaluation pipeline for SUP-NeRF and AutoRF on nuScenes, [KITTI](https://www.cvlibs.net/datasets/kitti/) and [Waymo](https://waymo.com/open/download/) datasets
 - [x] Data preparation and curation scripts
-- [TODO] Testing and evaluation pipeline for [BootInv, CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
+
+TODO 
+- [ ] Testing and evaluation pipeline for [BootInv, CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
 
 
 ## Installation
@@ -52,7 +66,6 @@ conda create -y -n sup-nerf python=3.8
 conda activate sup-nerf
 
 conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
-
 pip install -r requirements.txt
 ```
 
@@ -84,7 +97,6 @@ SUPNERF
 
 
 `pred_instance` includes the required instance masks prepared via a customized script in our folk of [mask-rcnn detectron2](https://github.com/yuliangguo/detectron2/tree/main/demo). Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/7yc4855o2lhlk42o52mib/pred_instance.zip?rlkey=ai4h3fe2ni56m6h3dxtweazs8&st=1wte714h&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/NuScenes/).
-
 
 
 `pred_det3d` includes 3D object detection results via a customized script in our folk of [FCOS3D](https://github.com/yuliangguo/mmdetection3d/tree/master/demo). It is only required by previous method AutoRF. If you only consider trying our method, you may not need it. Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/i0ov47j8qifebfpmhgxu2/pred_det3d.zip?rlkey=j5pyzyfcgkt1ij4ge69n0pcwm&st=hgzf2vy0&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/NuScenes/).
@@ -142,7 +154,7 @@ SUPNERF
 ```
 Because only the training split of KITTI dataset includes ground-truth object annotations, we conduct cross-domain evaluation on the training split of KITTI dataset.
 
-`calib`, `image`, `label`, `velodyne` are directly prepared following [DEVIANT]. If you want to prepare on your own, you could download the validation set from Waymo website, and use our script `data/Waymo/converter.py`. Our experiments are limited to the front view of Waymo. For all the surrounding views, you may refer to [mmlab-version converter](https://github.com/open-mmlab/mmdetection3d/blob/fe25f7a51d36e3702f961e198894580d83c4387b/tools/dataset_converters/waymo_converter.py#L33) for the data preparation.
+`calib`, `image`, `label`, `velodyne` are directly prepared following [DEVIANT](https://github.com/abhi1kumar/DEVIANT/blob/main/data/data_setup_README.md#waymo). If you want to prepare on your own, you could download the validation set from Waymo website, and use our script `data/Waymo/converter.py`. Our experiments are limited to the front view of Waymo. For all the surrounding views, you may refer to [mmlab-version converter](https://github.com/open-mmlab/mmdetection3d/blob/fe25f7a51d36e3702f961e198894580d83c4387b/tools/dataset_converters/waymo_converter.py#L33) for the data preparation.
 
 Similar to nuScenes, `pred_instance` includes the required instance masks prepared via a customized script in our folk of [mask-rcnn detectron2](https://github.com/yuliangguo/detectron2/tree/main/demo). Our prepared directory can be directly downloaded from [[dropbox]](https://www.dropbox.com/scl/fi/yayra8b0anuj69w4yvbb3/pred_instance.zip?rlkey=s5xnwffgppzystxfy8hk7oxpl&st=or9ve659&dl=0) [[hugging face]](https://huggingface.co/datasets/yuliangguo/SUP-NeRF-ECCV2024/tree/main/Waymo/validation).
 
@@ -153,24 +165,6 @@ The object-centric curated subsets and splits for our experiments are recorded i
 ## VSCode Launch
 
 All the training and testing pipelines described in the later sections are all included in `.vscode/launch.json` for convinient usage and debug. You may modify the argments, and use VSCode 'Run and Debug' panel to execute any of the included pipelines.
-
-## Training
-
-For training, `train_nuscenes.py` can be used to train different object-center NeRF networks. To train [SUPNeRF](https://yuliangguo.github.io/supnerf/) on nuScenes, execute
-
-```
-python train_nuscenes.py --config_file jsonfiles/supnerf.nusc.vehicle.car.json --gpus 4 --batch_size 48 --num_workers 16 --epochs 40
-```
-
-To train [AutoRF](https://sirwyver.github.io/AutoRF/) on nuScenes, execute 
-
-```
-python train_nuscenes.py --config_file jsonfiles/autorfmix.nusc.vehicle.car.json --gpus 4 --batch_size 48 --num_workers 16 --epochs 40
-```
-
-There are additional specific settings can be optionally changed. For those interested developers, check `train_nuscenes.py` for details. You can also modify other hyperparameters in the corresponding json files included in `jsonfiles/`. The network named `autorfmix` is slightly different from the original AutoRF in encoder so that both SUPNeRF and AutoRF can share the same encder as [CodeNeRF](https://github.com/wbjang/code-nerf) for fair comparison.
-
-It is also worth mentioning that the multi-gpu training was implemented using DP rather than DDP (which might be more optimal). The training logs are recodered using tensorboard.
 
 ## Testing
 
@@ -266,17 +260,37 @@ Testing results will be saved into a new folder created in the corresponding che
 | SUP-NeRF (Ours) | 4.8 / 17.0 | 2.32 / 1.56 | 10.01 / 10.6 | 1.68 / 1.54 | [config](jsonfiles/supnerf.waymo.car.json)  | [predictions](https://www.dropbox.com/scl/fo/et5bqdt0ci3lioh82hf97/AMaO8T-DXuUdknyvYV1PaAU?rlkey=m54ohyxdro0v34cthl1zoksbu&st=0r8jvqmh&dl=0) |
 | AutoRF-FCOS3D | 4.8 / 15.8 | 2.29 / 2.35 | 6.97 / 9.11 | 3.22 / 3.43 | [config](jsonfiles/autorfmix.waymo.car.json)  | [predictions](https://www.dropbox.com/scl/fo/g56a3mtn291mg6hwhy684/ANKO_WLXz2CYNZRCuXYUXyo?rlkey=6a7l1fzqr7a907jh1mq239f0e&st=n7b699ts&dl=0) |
 
+## Training
+
+ To train [SUPNeRF](https://yuliangguo.github.io/supnerf/) on nuScenes, execute
+
+```bash
+python train_nuscenes.py --config_file jsonfiles/supnerf.nusc.vehicle.car.json --gpus 4 --batch_size 48 --num_workers 16 --epochs 40
+```
+
+`train_nuscenes.py` can train different object-centric NeRFs.
+
+To train [AutoRF](https://sirwyver.github.io/AutoRF/) on nuScenes, execute 
+
+```bash
+python train_nuscenes.py --config_file jsonfiles/autorfmix.nusc.vehicle.car.json --gpus 4 --batch_size 48 --num_workers 16 --epochs 40
+```
+
+There are additional specific settings can be optionally changed. For those interested developers, check `train_nuscenes.py` for details. You can also modify other hyperparameters in the corresponding json files included in `jsonfiles/`. The network named `autorfmix` is slightly different from the original AutoRF in encoder so that both SUPNeRF and AutoRF share the same encoder as [CodeNeRF](https://github.com/wbjang/code-nerf) for fair comparison.
+
+We implement multi-gpu training using DP rather than DDP (which might be more optimal) and record training logs using tensorboard.
+
 
 ## Acknowledgements
 We thank the authors of the following awesome codebases:
 - [CodeNeRF](https://github.com/wbjang/code-nerf)
 - [BootInv](https://github.com/google-research/nerf-from-image)
-- [DEVIANT](https://github.com/abhi1kumar/DEVIANT.git)
+- [DEVIANT](https://github.com/abhi1kumar/DEVIANT)
 - [FCOS3D](https://github.com/open-mmlab/mmdetection3d/tree/main/configs/fcos3d)
 
 Please also consider citing them.
 
-### License
+## License
 
-MIT
+SUP-NeRF code is under the [MIT license](https://opensource.org/license/mit).
 
