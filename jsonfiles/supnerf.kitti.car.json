@@ -1,0 +1,57 @@
+{
+  "arch": "supnerf",
+  "net_hyperparams": {
+    "shape_blocks": 3,
+    "texture_blocks": 1,
+    "pose_blocks": 3,
+    "regress_blocks": 3,
+    "latent_dim": 256,
+    "num_xyz_freq": 10,
+    "num_dir_freq": 4,
+    "norm_layer_type": "BatchNorm2d",
+    "pose_shortcut": 1,
+    "pred_wlh": 0
+  },
+  "dataset": {
+    "name": "kitti",
+    "kitti_cat": "Car",
+    "seg_cat": "car",
+    "data_dir": "data/KITTI",
+    "split_dir": "data/KITTI/ImageSets",
+    "mask_pixels": 1600,
+    "box_iou_th": 0.5,
+    "max_dist": 40,
+    "min_depth": 3,
+    "min_lidar_cnt": 10,
+    "divisor": 1000
+  },
+  "n_rays": 1024,
+  "render_im_sz": 32,
+  "n_samples": 64,
+  "roi_margin": 15,
+  "max_img_sz": 320,
+  "in_img_sz": 128,
+  "loss_reg_coef": 1e-3,
+  "loss_occ_coef": 1e-1,
+  "loss_code_coef": 1e-1,
+  "loss_pose_coef": 1e-2,
+  "loss_sym_coef": 1.0,
+  "loss_obj_sz_coef": 1.0,
+  "lr_schedule": [
+    {"type":  "step", "lr":  1e-4, "interval":  40000},
+    {"type":  "step", "lr":  1e-4, "interval":  40000}
+  ],
+  "shapenet_obj_cood": 1,
+  "sym_aug": 0,
+  "obj_sz_reg": 0,
+  "euler_rot": 0,
+  "optimize": {
+    "num_opts": 100,
+    "opt_cam_pose": 0,
+    "lr_shape": 0.02,
+    "lr_texture": 0.02,
+    "lr_pose": 0.01,
+    "lr_half_interval": 1000
+  },
+  "model_dir": "checkpoints/supnerf"
+}

@@ -1,0 +1,16 @@
+wandb
+pytorch3d
+scipy
+numpy
+matplotlib
+scikit-image
+tqdm
+tensorboard
+opencv-python
+imageio
+imageio-ffmpeg
+lpips
+nuscenes-devkit
+cityscapesScripts
+Pillow==9.5.0
+thop

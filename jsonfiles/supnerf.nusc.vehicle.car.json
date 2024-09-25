@@ -1,0 +1,67 @@
+{
+  "arch": "supnerf",
+  "net_hyperparams": {
+    "shape_blocks": 3,
+    "texture_blocks": 1,
+    "pose_blocks": 3,
+    "regress_blocks": 3,
+    "latent_dim": 256,
+    "num_xyz_freq": 10,
+    "num_dir_freq": 4,
+    "norm_layer_type": "BatchNorm2d",
+    "pose_shortcut": 1,
+    "pred_wlh": 0
+  },
+  "dataset": {
+    "name": "nusc",
+    "nusc_cat": "vehicle.car",
+    "seg_cat": "car",
+    "train_data_dir": "data/NuScenes",
+    "train_nusc_version": "v1.0-trainval",
+    "test_data_dir": "data/NuScenes",
+    "img_h": 900,
+    "img_w": 1600,
+    "mask_pixels": 2500,
+    "box_iou_th": 0.5,
+    "max_dist": 40,
+    "min_lidar_cnt": 5,
+    "divisor": 1000
+  },
+  "n_rays": 1024,
+  "render_im_sz": 32,
+  "n_samples": 64,
+  "roi_margin": 5,
+  "max_img_sz": 320,
+  "in_img_sz": 128,
+  "loss_reg_coef": 0.001,
+  "loss_occ_coef": 0.1,
+  "loss_code_coef": 0.1,
+  "loss_pose_coef": 0.01,
+  "loss_sym_coef": 1.0,
+  "loss_obj_sz_coef": 1.0,
+  "lr_schedule": [
+    {
+      "type": "step",
+      "lr": 0.0001,
+      "interval": 40000
+    },
+    {
+      "type": "step",
+      "lr": 0.0001,
+      "interval": 40000
+    }
+  ],
+  "shapenet_obj_cood": 1,
+  "sym_aug": 0,
+  "obj_sz_reg": 0,
+  "euler_rot": 0,
+  "optimize": {
+    "num_opts": 100,
+    "opt_cam_pose": 0,
+    "lr_shape": 0.02,
+    "lr_texture": 0.02,
+    "lr_pose": 0.01,
+    "lr_half_interval": 1000
+  },
+  "model_dir": "checkpoints/supnerf"
+}
