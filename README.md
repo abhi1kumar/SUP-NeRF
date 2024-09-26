@@ -54,9 +54,7 @@ If you find our work useful in your research, please consider starring the repo 
 - [x] Training pipeline for SUP-NeRF and AutoRF on [nuScenes](https://www.nuscenes.org/nuscenes) dataset
 - [x] Testing and evaluation pipeline for SUP-NeRF and AutoRF on nuScenes, [KITTI](https://www.cvlibs.net/datasets/kitti/) and [Waymo](https://waymo.com/open/download/) datasets
 - [x] Data preparation and curation scripts
-
-TODO 
-- [ ] Testing and evaluation pipeline for [BootInv, CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
+- [x] Testing and evaluation pipeline for [BootInv, CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
 
 
 ## Installation
