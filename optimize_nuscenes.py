@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
     # conduct cross-view evaluation of rgb and depth (multi-view optimization does not need, just use mean)
     if not args.opt_multiview:
-        cross_vis_iter = 50 if args.vis > 0 else 0
+        cross_vis_iter = 50 if args.vis > 0 else None
         optimizer.eval_cross_view(vis_iter=cross_vis_iter)
         cross_eval_file = os.path.join(optimizer.cross_eval_folder, 'cross_eval.pth')
     else:
