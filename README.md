@@ -50,11 +50,11 @@ If you find our work useful in your research, please consider starring the repo 
 ## Catalog
 
 - [x] Official pytorch implementation of [SUP-NeRF, ECCV 2024 (Ours)](https://yuliangguo.github.io/supnerf/)
-- [x] Unofficial pytorch implementation of [AutoRF, CVPR 2022](https://sirwyver.github.io/AutoRF/)
+- [x] Unofficial pytorch implementation of [AutoRF: Learning 3D Object Radiance Fields from Single View Observations, CVPR 2022](https://sirwyver.github.io/AutoRF/)
 - [x] Training pipeline for SUP-NeRF and AutoRF on [nuScenes](https://www.nuscenes.org/nuscenes) dataset
 - [x] Testing and evaluation pipeline for SUP-NeRF and AutoRF on nuScenes, [KITTI](https://www.cvlibs.net/datasets/kitti/) and [Waymo](https://waymo.com/open/download/) datasets
 - [x] Data preparation and curation scripts
-- [x] Testing and evaluation pipeline for [BootInv, CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
+- [x] Testing and evaluation pipeline for [Shape, Pose, and Appearance from a Single Image via Bootstrapped Radiance Field Inversion (BootInv, A.K.A. nerf-from-image), CVPR 2023](https://github.com/google-research/nerf-from-image) on nuScenes, KITTI and Waymo datasets
 
 
 ## Installation
